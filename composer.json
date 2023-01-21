@@ -1,0 +1,31 @@
+{
+    "name": "devpress/address-autocomplete-google-places",
+    "description": "",
+    "keywords": [ "wordpress" ],
+    "type": "wordpress-plugin",
+    "homepage": "https://github.com/devpress/address-autocomplete-google-places",
+    "license": "GPL-2.0+",
+    "authors": [
+        {
+            "name": "Devin Price",
+            "homepage": "https://devpress.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/devpress/address-autocomplete-google-places/issues",
+        "source": "https://github.com/devpress/address-autocomplete-google-places"
+    },
+    "require-dev": {
+        "automattic/vipwpcs": "^2.3",
+        "assertwell/wp-core-test-framework": "^0.1.1",
+        "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+        "php": ">=7.4",
+        "phpunit/phpunit": "^7",
+        "yoast/phpunit-polyfills": "^1.0"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "PreciseSales\\Test\\": "tests/phpunit/"
+        }
+    }
+}

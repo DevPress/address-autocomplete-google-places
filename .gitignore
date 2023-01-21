@@ -1,0 +1,7 @@
+# OSX
+.DS_Store
+Icon
+
+# Composer
+vendor
+.phpcs-cache
