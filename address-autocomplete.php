@@ -55,6 +55,11 @@ class Address_Autocomplete {
 		self::$url = plugin_dir_url( __FILE__ );
 		self::$dir = plugin_dir_path( __FILE__ );
 
+		if ( ! defined( 'WC_VERSION' ) || version_compare( WC_VERSION, self::required_woo, '<' ) ) {
+			add_action( 'admin_notices', array( $this, 'woocommerce_compatibility_notice' ) );
+			return;
+		}
+
 		// Enqueue scripts and styles.
 		require_once self::$dir . '/includes/class-enqueue.php';
 		new Address_Autocomplete\Enqueue();
@@ -71,6 +76,16 @@ class Address_Autocomplete {
 		new Address_Autocomplete\Settings_Page();
 		$integrations[] = 'Address_Autocomplete\Settings_Page';
 		return $integrations;
+	}
+
+	/**
+	 * Display a warning message if minimum version of WooCommerce check fails.
+	 *
+	 * @since  1.0.0
+	 * @return void
+	 */
+	public function woocommerce_compatibility_notice() {
+		echo '<div class="error"><p>' . sprintf( __( 'Address Autocomplete requires at least WooCommerce v%1$s in order to function.', 'address-autocomplete' ), self::$required_woo ) . '</p></div>';
 	}
 
 }
