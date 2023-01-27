@@ -14,7 +14,11 @@ Enables address autocomplete with the Google Places API for WooCommerce.
 
 ![Screenshot of autocomplete.](.wordpress-org/screenshot-1.png?raw=true "Screenshot")
 
-Video link.
+-   Help customers save time in the checkout process.
+-   Provides more consistent addresses formatting.
+-   Autofills address results for both shipping and billing.
+-   Restricts autocomplete suggestions to the country selected.
+-   Optimized API calls to keep costs low.
 
 ### Get Started
 
@@ -24,6 +28,8 @@ Video link.
 
 ### Google Places API Billing and Setup
 
-This plugin requires a Google Places API Key, which requires you to set up a Google Cloud Account. Watch this video to see how it's done.
+This plugin requires a [Google Places API Key](https://developers.google.com/maps/documentation/places/web-service/get-api-key). You'll need a G[Google Cloud Platform (GCP)](https://cloud.google.com/) account to generate this.
 
-Place Details charges start at .017 USD per autocomplete session (or $17 per 1000 sessions). See this page for the [latest pricing](https://developers.google.com/maps/documentation/places/web-service/usage-and-billing#places-details). Google Cloud generally offers a big initial credit to try out the service.
+https://www.youtube.com/watch?v=2_HZObVbe-g&t=53s
+
+Place Details charges start at .017 USD per autocomplete session (or $17 per 1000 sessions). See this page for the [latest pricing](https://developers.google.com/maps/documentation/places/web-service/usage-and-billing#places-details). Google Cloud offers signup credits so that you can trial the service without any cost.
