@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name: Address Autocomplete
+ * Plugin Name: Address Autocomplete Google Places
  * Plugin URI: https://github.com/devpress/address-autocomplete-google-places
  * Description: Enables address autocomplete with Google Places API for WooCommerce.
  * Version: 1.0.0
  * Author: DevPress
  * Author URI: https://devpress.com
- * Text Domain: address-autocomplete
+ * Text Domain: address-autocomplete-google-places
  *
  * WC requires at least: 5.6.0
  * WC tested up to: 7.2.2
@@ -98,7 +98,7 @@ class Address_Autocomplete {
 	 * @return void
 	 */
 	public function woocommerce_compatibility_notice() {
-		echo '<div class="error"><p>' . sprintf( __( 'Address Autocomplete requires at least WooCommerce v%1$s in order to function.', 'address-autocomplete' ), self::$required_woo ) . '</p></div>';
+		echo '<div class="error"><p>' . sprintf( __( 'Address Autocomplete requires at least WooCommerce v%1$s in order to function.', 'address-autocomplete-google-places' ), self::$required_woo ) . '</p></div>';
 	}
 
 	/**
@@ -112,7 +112,7 @@ class Address_Autocomplete {
 	public function plugin_action_links( $links ) {
 		$settings_url = admin_url( 'admin.php?page=wc-settings&tab=integration&section=address_autocomplete' );
 		$custom_links = array(
-			'<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'address-autocomplete' ) . '</a>',
+			'<a href="' . esc_url( $settings_url ) . '">' . esc_html__( 'Settings', 'address-autocomplete-google-places' ) . '</a>',
 		);
 
 		return array_merge( $custom_links, $links );

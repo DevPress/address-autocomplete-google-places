@@ -11,8 +11,8 @@ class Settings_Page extends \WC_Integration {
 	 */
 	public function __construct() {
 		$this->id                 = 'address_autocomplete';
-		$this->method_title       = __( 'Address Autocomplete', 'address-autocomplete' );
-		$this->method_description = __( 'An integration with Google Places API for address autocomplete on checkout page.', 'address-autocomplete' );
+		$this->method_title       = __( 'Address Autocomplete', 'address-autocomplete-google-places' );
+		$this->method_description = __( 'An integration with Google Places API for address autocomplete on checkout page.', 'address-autocomplete-google-places' );
 
 		// Load the settings.
 		$this->init_form_fields();
@@ -29,10 +29,10 @@ class Settings_Page extends \WC_Integration {
 		$this->form_fields = array(
 			'api_key' => array(
 				'id'          => 'address-autocomplete-api-key',
-				'title'       => __( 'Google Places API Key', 'address-autocomplete' ),
+				'title'       => __( 'Google Places API Key', 'address-autocomplete-google-places' ),
 				'type'        => 'password',
 				'description' => sprintf(
-					__( 'Generate a <a href="%s" target="_blank">Google Places API Key</a>.', 'address-autocomplete' ),
+					__( 'Generate a <a href="%s" target="_blank">Google Places API Key</a>.', 'address-autocomplete-google-places' ),
 					'https://developers.google.com/maps/documentation/javascript/get-api-key',
 				),
 				'css'         => 'min-width:300px;',

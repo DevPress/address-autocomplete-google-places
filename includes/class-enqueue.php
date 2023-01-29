@@ -54,7 +54,7 @@ class Enqueue {
 
 		// Loads autocomplete functionality for WooCommerce.
 		wp_register_script(
-			'address-autocomplete',
+			'address-autocomplete-google-places',
 			Address_Autocomplete::$url . 'assets/address-autocomplete.js',
 			array(),
 			Address_Autocomplete::$version,
@@ -65,7 +65,7 @@ class Enqueue {
 		wp_enqueue_script(
 			'address-autocomplete-google-places-api',
 			'https://maps.googleapis.com/maps/api/js?key=' . esc_attr( $api_key ) . '&libraries=places&callback=initAddressAutocomplete',
-			array( 'address-autocomplete' ),
+			array( 'address-autocomplete-google-places' ),
 			'1.0.0',
 			true
 		);
