@@ -5,7 +5,6 @@
  */
 class AddressAutocomplete {
 	constructor() {
-		console.log("hi");
 		document.addEventListener("DOMContentLoaded", this.initFields, false);
 	}
 

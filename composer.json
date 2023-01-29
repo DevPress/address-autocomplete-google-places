@@ -19,11 +19,6 @@
         "automattic/vipwpcs": "^2.3",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2"
     },
-    "autoload-dev": {
-        "psr-4": {
-            "PreciseSales\\Test\\": "tests/phpunit/"
-        }
-    },
     "config": {
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
