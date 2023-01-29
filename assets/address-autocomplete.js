@@ -101,7 +101,6 @@ class AddressAutocomplete {
 	 * Parse the address components returned by Google Places.
 	 */
 	parsePlace = (address, fieldInputs) => {
-		console.log("place change");
 		let place = address.getPlace();
 		let streetNumber = "";
 		let route = "";
@@ -110,7 +109,6 @@ class AddressAutocomplete {
 			const type = place.address_components[i].types[0];
 			const shortName = place.address_components[i].short_name;
 			const longName = place.address_components[i].long_name;
-			console.log(type, shortName, longName);
 
 			// Street number.
 			if (type === "street_number") {

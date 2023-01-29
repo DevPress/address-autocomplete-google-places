@@ -1,4 +1,4 @@
-=== Address Autocomplete with Google Places ===
+=== Address Autocomplete ===
 
 Contributors: devpress
 Tags: woocommerce
