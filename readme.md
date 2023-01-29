@@ -1,4 +1,4 @@
-# Address Autocomplete with Google Places ![Testing status](https://github.com/devpress/address-autocomplete-google-places/actions/workflows/php-tests.yml/badge.svg?branch=main)
+# Address Autocomplete with Google Places
 
 -   Requires PHP: 7.0
 -   WP requires at least: 6.0
