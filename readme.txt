@@ -4,7 +4,7 @@ Contributors: devpress
 Tags: woocommerce
 Requires at least: 6.0
 Tested up to: 6.0
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,10 @@ This plugin does one thing, and it does it well.
 2. Settings page.
 
 == Changelog ==
+
+= 1.0.1 =
+
+* Update: Improve country targeting.
 
 = 1.0 =
 

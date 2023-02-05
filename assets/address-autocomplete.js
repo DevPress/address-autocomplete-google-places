@@ -43,21 +43,21 @@ class AddressAutocomplete {
 			fieldInputs.country
 		);
 
+		// If a country is already selected, use that to limit the results.
+		let initalSupportCountries = supportedCountries;
+		if (fieldInputs.country.value) {
+			initalSupportCountries = [fieldInputs.country.value];
+		}
+
 		// Initialize Places Autocomplete on Address 1.
 		const address = new google.maps.places.Autocomplete(field, {
 			types: ["address"],
 			// Scoping the fields help reduce API charges.
 			fields: ["address_component"],
-			country: supportedCountries ?? null,
+			componentRestrictions: {
+				country: initalSupportCountries ?? null,
+			},
 		});
-
-		if (fieldInputs.country.value) {
-			this.setCountryRestriction(
-				address,
-				fieldInputs.country.value,
-				supportedCountries
-			);
-		}
 
 		// If the country selector is a select2 field, we need to use jQuery to listen for changes.
 		if (window.jQuery) {
@@ -88,6 +88,7 @@ class AddressAutocomplete {
 	 * Sets the countries that address results will be returned for.
 	 */
 	setCountryRestriction = (address, country, countryAllowList = []) => {
+		// If a specific country is selected, that's the only one allowed.
 		if (country) {
 			countryAllowList = [country];
 		}

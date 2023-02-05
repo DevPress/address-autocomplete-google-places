@@ -3,7 +3,7 @@
  * Plugin Name: Address Autocomplete Google Places
  * Plugin URI: https://github.com/devpress/address-autocomplete-google-places
  * Description: Enables address autocomplete with Google Places API for WooCommerce.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: DevPress
  * Author URI: https://devpress.com
  * Text Domain: address-autocomplete-google-places
@@ -28,7 +28,7 @@ class Address_Autocomplete {
 	public static $instance;
 
 	/** @var string */
-	public static $version = '1.0.0';
+	public static $version = '1.0.1';
 
 	/** @var string */
 	public static $required_woo = '5.6.0';
