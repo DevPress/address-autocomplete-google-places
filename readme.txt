@@ -48,6 +48,10 @@ This plugin does one thing, and it does it well.
 
 == Changelog ==
 
+= 1.0.2 =
+
+* Update: Declare compatibility for High Performance Order Storage.
+
 = 1.0.1 =
 
 * Update: Improve country targeting.

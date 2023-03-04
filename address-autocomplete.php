@@ -59,13 +59,28 @@ class Address_Autocomplete {
 		self::$url = plugin_dir_url( __FILE__ );
 		self::$dir = plugin_dir_path( __FILE__ );
 
-		// On plugins page adds link to the settings.
+		// Declares compatibility with High Performance Order Storage.
+		add_action( 'before_woocommerce_init', array( $this, 'declare_custom_order_table_compatibility' ) );
+
+		// Adds link to settings from plugins page.
 		$base_name = plugin_basename( __FILE__ );
 		add_filter( 'plugin_action_links_' . $base_name, array( $this, 'plugin_action_links' ) );
 
 		// Load this plugin after WooCommerce.
 		add_action( 'plugins_loaded', array( $this, 'init' ) );
 	}
+
+	/**
+	 * Declares compatibility with High Performance Order Storage.
+	 * https://github.com/woocommerce/woocommerce/wiki/High-Performance-Order-Storage-Upgrade-Recipe-Book
+	 */
+	public function declare_custom_order_table_compatibility() {
+		if ( ! class_exists( \Automattic\WooCommerce\Utilities\FeaturesUtil::class ) ) {
+			return;
+		}
+		\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility( 'custom_order_tables', __FILE__, true );
+	}
+
 
 	/**
 	 * Loads plugin functionality after WooCommerce version check.
