@@ -103,25 +103,24 @@ class AddressAutocomplete {
 	 */
 	parsePlace = (address, fieldInputs) => {
 		let place = address.getPlace();
-		let streetNumber = "";
-		let route = "";
+
+		// We get the country first since address components vary by country.
+		const country = this.parseCountry(place.address_components);
+
+		// Update the country field.
+		const countryField = fieldInputs.country;
+		countryField.value = country;
+		countryField.dispatchEvent(new Event("change"));
+
+		// Update the address1 field.
+		fieldInputs.address1.value = this.parseAddress1(
+			place.address_components
+		);
 
 		for (let i = 0; i < place.address_components.length; i++) {
 			const type = place.address_components[i].types[0];
 			const shortName = place.address_components[i].short_name;
 			const longName = place.address_components[i].long_name;
-
-			// Street number.
-			if (type === "street_number") {
-				streetNumber = longName;
-				continue;
-			}
-
-			// Street name.
-			if (type === "route") {
-				route = longName;
-				continue;
-			}
 
 			// City.
 			if (type === "sublocality_level_1" || type === "locality") {
@@ -150,23 +149,39 @@ class AddressAutocomplete {
 				continue;
 			}
 
-			// Country.
-			if (type === "country") {
-				const countryField = fieldInputs.country;
-				countryField.value = shortName;
-				countryField.dispatchEvent(new Event("change"));
-				continue;
-			}
-
 			// Postal code.
 			if (type === "postal_code") {
 				fieldInputs.postcode.value = longName;
 				continue;
 			}
 		}
+	};
 
-		// Populate address1 field.
-		fieldInputs.address1.value = streetNumber + " " + route;
+	/**
+	 * Parse country from address components.
+	 */
+	parseCountry = (addressComponents) => {
+		const countryComponent = addressComponents.filter((address) =>
+			address.types.includes("country")
+		);
+		return countryComponent[0].short_name;
+	};
+
+	/**
+	 * Parse address1 from address components.
+	 */
+	parseAddress1 = (addressComponents) => {
+		const streetNumberComponent = addressComponents.filter((address) =>
+			address.types.includes("street_number")
+		);
+		const routeComponent = addressComponents.filter((address) =>
+			address.types.includes("route")
+		);
+		return (
+			streetNumberComponent[0].long_name +
+			" " +
+			routeComponent[0].long_name
+		);
 	};
 
 	/**
