@@ -104,57 +104,48 @@ class AddressAutocomplete {
 	parsePlace = (address, fieldInputs) => {
 		let place = address.getPlace();
 
-		// We get the country first since address components vary by country.
+		console.log(place.address_components);
+
+		// Get country first since address components vary by country.
 		const country = this.parseCountry(place.address_components);
 
-		// Update the country field.
+		// Set the country field.
 		const countryField = fieldInputs.country;
 		countryField.value = country;
 		countryField.dispatchEvent(new Event("change"));
 
-		// Update the address1 field.
-		fieldInputs.address1.value = this.parseAddress1(
+		// Set the address1 field.
+		fieldInputs.address1.value = this.parseStreetAddress(
 			place.address_components
 		);
 
-		for (let i = 0; i < place.address_components.length; i++) {
-			const type = place.address_components[i].types[0];
-			const shortName = place.address_components[i].short_name;
-			const longName = place.address_components[i].long_name;
+		// Set the city field.
+		// Requires the country to properly parse.
+		fieldInputs.city.value = this.parseCity(
+			place.address_components,
+			country
+		);
 
-			// City.
-			if (type === "sublocality_level_1" || type === "locality") {
-				fieldInputs.city.value = longName;
-				continue;
-			}
-
-			// State.
-			if (type === "administrative_area_level_1") {
-				const stateField = fieldInputs.state;
-				if (stateField.tagName == "SELECT") {
-					stateField.value = shortName;
-					Array.prototype.forEach.call(
-						stateField.options,
-						function (option) {
-							if (shortName == option.value) {
-								option.selected = true;
-								return true;
-							}
-						}
-					);
-				} else {
-					stateField.value = longName;
+		// Set the state field.
+		const stateField = fieldInputs.state;
+		const stateComponent = this.parseState(place.address_components);
+		if (stateField.tagName == "SELECT") {
+			stateField.value = stateComponent.short_name;
+			Array.prototype.forEach.call(stateField.options, function (option) {
+				if (stateComponent.short_name == option.value) {
+					option.selected = true;
+					return true;
 				}
-				stateField.dispatchEvent(new Event("change"));
-				continue;
-			}
-
-			// Postal code.
-			if (type === "postal_code") {
-				fieldInputs.postcode.value = longName;
-				continue;
-			}
+			});
+		} else {
+			stateField.value = stateComponent.long_name;
 		}
+		stateField.dispatchEvent(new Event("change"));
+
+		// Set the postal code field.
+		fieldInputs.postcode.value = this.parsePostalCode(
+			place.address_components
+		);
 	};
 
 	/**
@@ -169,8 +160,10 @@ class AddressAutocomplete {
 
 	/**
 	 * Parse address1 from address components.
+	 *
+	 * @return {string} The street address.
 	 */
-	parseAddress1 = (addressComponents) => {
+	parseStreetAddress = (addressComponents) => {
 		const streetNumberComponent = addressComponents.filter((address) =>
 			address.types.includes("street_number")
 		);
@@ -182,6 +175,50 @@ class AddressAutocomplete {
 			" " +
 			routeComponent[0].long_name
 		);
+	};
+
+	/**
+	 * Parse city from address components.
+	 *
+	 * @return {string} The city.
+	 */
+	parseCity = (addressComponents, country) => {
+		// Different countries use different address components for the city.
+		let key = "sublocality_level_1";
+		if ("GB" === country) {
+			key = "postal_town";
+		}
+
+		const cityComponent = addressComponents.filter((address) =>
+			address.types.includes(key)
+		);
+
+		console.log(country);
+		console.log(cityComponent);
+
+		return cityComponent[0].long_name;
+	};
+
+	/**
+	 * Parse state from address components.
+	 *
+	 * @return {object} The state component.
+	 */
+	parseState = (addressComponents, type = "short_name") => {
+		const stateComponent = addressComponents.filter((address) =>
+			address.types.includes("administrative_area_level_1")
+		);
+		return stateComponent[0];
+	};
+
+	/**
+	 * Parse postal code from address components.
+	 */
+	parsePostalCode = (addressComponents) => {
+		const countryComponent = addressComponents.filter((address) =>
+			address.types.includes("postal_code")
+		);
+		return countryComponent[0].long_name;
 	};
 
 	/**

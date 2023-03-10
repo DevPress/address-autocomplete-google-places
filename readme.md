@@ -40,3 +40,4 @@ It is recommended you test this plugin with any countries that aren't on this li
 
 -   United States (US)
 -   Canada (CA)
+-   Great Britain (GB)
