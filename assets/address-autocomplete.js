@@ -92,7 +92,6 @@ class AddressAutocomplete {
 		if (country) {
 			countryAllowList = [country];
 		}
-
 		address.setComponentRestrictions({
 			country: countryAllowList,
 		});
@@ -102,12 +101,14 @@ class AddressAutocomplete {
 	 * Parse the address components returned by Google Places.
 	 */
 	parsePlace = (address, fieldInputs) => {
-		let place = address.getPlace();
-
-		console.log(place.address_components);
+		const place = address.getPlace();
+		const addressComponents = place.address_components;
 
 		// Get country first since address components vary by country.
-		const country = this.parseCountry(place.address_components);
+		const country = this.getAddressComponentShortName(
+			addressComponents,
+			"country"
+		);
 
 		// Set the country field.
 		const countryField = fieldInputs.country;
@@ -115,20 +116,18 @@ class AddressAutocomplete {
 		countryField.dispatchEvent(new Event("change"));
 
 		// Set the address1 field.
-		fieldInputs.address1.value = this.parseStreetAddress(
-			place.address_components
-		);
+		fieldInputs.address1.value = this.parseStreetAddress(addressComponents);
 
 		// Set the city field.
 		// Requires the country to properly parse.
-		fieldInputs.city.value = this.parseCity(
-			place.address_components,
-			country
-		);
+		fieldInputs.city.value = this.parseCity(addressComponents, country);
 
 		// Set the state field.
 		const stateField = fieldInputs.state;
-		const stateComponent = this.parseState(place.address_components);
+		const stateComponent = this.getAddressComponent(
+			addressComponents,
+			"administrative_area_level_1"
+		);
 		if (stateField.tagName == "SELECT") {
 			stateField.value = stateComponent.short_name;
 			Array.prototype.forEach.call(stateField.options, function (option) {
@@ -143,19 +142,10 @@ class AddressAutocomplete {
 		stateField.dispatchEvent(new Event("change"));
 
 		// Set the postal code field.
-		fieldInputs.postcode.value = this.parsePostalCode(
-			place.address_components
+		fieldInputs.postcode.value = this.getAddressComponentLongName(
+			addressComponents,
+			"postal_code"
 		);
-	};
-
-	/**
-	 * Parse country from address components.
-	 */
-	parseCountry = (addressComponents) => {
-		const countryComponent = addressComponents.filter((address) =>
-			address.types.includes("country")
-		);
-		return countryComponent[0].short_name;
 	};
 
 	/**
@@ -164,17 +154,15 @@ class AddressAutocomplete {
 	 * @return {string} The street address.
 	 */
 	parseStreetAddress = (addressComponents) => {
-		const streetNumberComponent = addressComponents.filter((address) =>
-			address.types.includes("street_number")
+		const streetNumber = this.getAddressComponentLongName(
+			addressComponents,
+			"street_number"
 		);
-		const routeComponent = addressComponents.filter((address) =>
-			address.types.includes("route")
+		const route = this.getAddressComponentLongName(
+			addressComponents,
+			"route"
 		);
-		return (
-			streetNumberComponent[0].long_name +
-			" " +
-			routeComponent[0].long_name
-		);
+		return `${streetNumber} ${route}`.trim();
 	};
 
 	/**
@@ -183,42 +171,75 @@ class AddressAutocomplete {
 	 * @return {string} The city.
 	 */
 	parseCity = (addressComponents, country) => {
-		// Different countries use different address components for the city.
-		let key = "sublocality_level_1";
+		// Different countries use different address components for city.
+		let city = "";
+
+		// GB has some oddities with city names.
 		if ("GB" === country) {
-			key = "postal_town";
+			city = this.getAddressComponentLongName(
+				addressComponents,
+				"postal_town"
+			);
+			if (city === "") {
+				city = this.getAddressComponentLongName(
+					addressComponents,
+					"administrative_area_level_2"
+				);
+			}
+			return city;
 		}
 
-		const cityComponent = addressComponents.filter((address) =>
+		const locality = this.getAddressComponentLongName(
+			addressComponents,
+			"locality"
+		);
+
+		if (locality !== "") {
+			return locality;
+		}
+
+		const sublocality = this.getAddressComponentLongName(
+			addressComponents,
+			"sublocality_level_1"
+		);
+
+		if (sublocality !== "") {
+			return sublocality;
+		}
+
+		return "";
+	};
+
+	/**
+	 * Gets the shortname for the address component.
+	 *
+	 * @return {string} The shortname.
+	 */
+	getAddressComponentShortName = (addressComponents, key) => {
+		const component = this.getAddressComponent(addressComponents, key);
+		return component.short_name ?? "";
+	};
+
+	/**
+	 * Gets the longname for the address component.
+	 *
+	 * @return {string} The shortname.
+	 */
+	getAddressComponentLongName = (addressComponents, key) => {
+		const component = this.getAddressComponent(addressComponents, key);
+		return component.long_name ?? "";
+	};
+
+	/**
+	 * Filters the address components by type key.
+	 *
+	 * @return {object} The address component.
+	 */
+	getAddressComponent = (addressComponents, key) => {
+		const component = addressComponents.filter((address) =>
 			address.types.includes(key)
 		);
-
-		console.log(country);
-		console.log(cityComponent);
-
-		return cityComponent[0].long_name;
-	};
-
-	/**
-	 * Parse state from address components.
-	 *
-	 * @return {object} The state component.
-	 */
-	parseState = (addressComponents, type = "short_name") => {
-		const stateComponent = addressComponents.filter((address) =>
-			address.types.includes("administrative_area_level_1")
-		);
-		return stateComponent[0];
-	};
-
-	/**
-	 * Parse postal code from address components.
-	 */
-	parsePostalCode = (addressComponents) => {
-		const countryComponent = addressComponents.filter((address) =>
-			address.types.includes("postal_code")
-		);
-		return countryComponent[0].long_name;
+		return component[0] ?? [];
 	};
 
 	/**

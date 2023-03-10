@@ -38,6 +38,8 @@ Place Details charges start at .017 USD per autocomplete session (or $17 per 100
 
 It is recommended you test this plugin with any countries that aren't on this list if your shop supports them. If the fields are not populating correctly, please reach out to support at devpress.com.
 
--   United States (US)
 -   Canada (CA)
--   Great Britain (GB)
+-   United States (US)
+-   United Kingdom (UK)
+-   Portugal (PT)
+-   Puerto Rico (PR)
