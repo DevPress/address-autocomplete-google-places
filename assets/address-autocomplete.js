@@ -103,7 +103,11 @@ class AddressAutocomplete {
 	parsePlace2 = (address, fieldInputs) => {
 		const place = address.getPlace();
 		let address1 = "";
+		let city = "";
+		let state = "";
+		let stateLongName = "";
 		let postcode = "";
+		let country = "";
 
 		// Get each component of the address from the place details,
 		// and then fill-in the corresponding field on the form.
@@ -134,22 +138,54 @@ class AddressAutocomplete {
 				}
 
 				case "locality":
-					console.log("city", component.long_name);
+					city = component.long_name;
 					break;
 
 				case "administrative_area_level_1": {
-					console.log("state", component.short_name);
+					state = component.short_name;
+					stateLongName = component.long_name;
 					break;
 				}
 
 				case "country":
-					console.log("country", component.short_name);
+					country = component.short_name;
 					break;
 			}
 		}
 
+		// Set the country field.
+		console.log("country", country);
+		const countryField = fieldInputs.country;
+		countryField.value = country;
+		countryField.dispatchEvent(new Event("change"));
+
+		// Set the address1 field.
 		console.log("address1", address1);
+		fieldInputs.address1.value = address1;
+
+		// Set the city field.
+		// Requires the country to properly parse.
+		console.log("city", country);
+		fieldInputs.city.value = city;
+
+		// Set the state field.
+		const stateField = fieldInputs.state;
+		if (stateField.tagName == "SELECT") {
+			stateField.value = state;
+			Array.prototype.forEach.call(stateField.options, function (option) {
+				if (state == option.value) {
+					option.selected = true;
+					return true;
+				}
+			});
+		} else {
+			stateField.value = stateLongName;
+		}
+		stateField.dispatchEvent(new Event("change"));
+
+		// Set the postal code field.
 		console.log("postcode", postcode);
+		fieldInputs.postcode.value = postcode;
 	};
 
 	/**
