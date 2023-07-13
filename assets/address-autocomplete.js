@@ -80,7 +80,7 @@ class AddressAutocomplete {
 
 		// Listen for an autocomplete selection and set new values.
 		google.maps.event.addListener(address, "place_changed", () => {
-			this.parsePlace2(address, fieldInputs);
+			this.parsePlace(address, fieldInputs);
 		});
 	};
 
@@ -100,100 +100,18 @@ class AddressAutocomplete {
 	/**
 	 * Parse the address components returned by Google Places.
 	 */
-	parsePlace2 = (address, fieldInputs) => {
-		const place = address.getPlace();
-		let address1 = "";
-		let city = "";
-		let state = "";
-		let stateLongName = "";
-		let postcode = "";
-		let country = "";
-
-		// Get each component of the address from the place details,
-		// and then fill-in the corresponding field on the form.
-		// place.address_components are google.maps.GeocoderAddressComponent objects
-		// which are documented at http://goo.gle/3l5i5Mr
-		for (const component of place.address_components) {
-			const componentType = component.types[0];
-
-			switch (componentType) {
-				case "street_number": {
-					address1 = `${component.long_name} ${address1}`;
-					break;
-				}
-
-				case "route": {
-					address1 += component.short_name;
-					break;
-				}
-
-				case "postal_code": {
-					postcode = `${component.long_name}${postcode}`;
-					break;
-				}
-
-				case "postal_code_suffix": {
-					postcode = `${postcode}-${component.long_name}`;
-					break;
-				}
-
-				case "locality":
-					city = component.long_name;
-					break;
-
-				case "administrative_area_level_1": {
-					state = component.short_name;
-					stateLongName = component.long_name;
-					break;
-				}
-
-				case "country":
-					country = component.short_name;
-					break;
-			}
-		}
-
-		// Set the country field.
-		console.log("country", country);
-		const countryField = fieldInputs.country;
-		countryField.value = country;
-		countryField.dispatchEvent(new Event("change"));
-
-		// Set the address1 field.
-		console.log("address1", address1);
-		fieldInputs.address1.value = address1;
-
-		// Set the city field.
-		// Requires the country to properly parse.
-		console.log("city", country);
-		fieldInputs.city.value = city;
-
-		// Set the state field.
-		const stateField = fieldInputs.state;
-		if (stateField.tagName == "SELECT") {
-			stateField.value = state;
-			Array.prototype.forEach.call(stateField.options, function (option) {
-				if (state == option.value) {
-					option.selected = true;
-					return true;
-				}
-			});
-		} else {
-			stateField.value = stateLongName;
-		}
-		stateField.dispatchEvent(new Event("change"));
-
-		// Set the postal code field.
-		console.log("postcode", postcode);
-		fieldInputs.postcode.value = postcode;
-	};
-
-	/**
-	 * Parse the address components returned by Google Places.
-	 */
 	parsePlace = (address, fieldInputs) => {
 		const place = address.getPlace();
 		const addressComponents = place.address_components;
+
+		// Useful for debugging.
+		if (false) {
+			for (const component of place.address_components) {
+				const componentType = component.types[0];
+				console.log(componentType);
+				console.log(component);
+			}
+		}
 
 		// Get country first since address components vary by country.
 		const country = this.getAddressComponentShortName(
