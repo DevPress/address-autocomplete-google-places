@@ -3,8 +3,8 @@
 Contributors: devpress
 Tags: woocommerce
 Requires at least: 6.0
-Tested up to: 6.1.1
-Stable tag: 1.1.0
+Tested up to: 6.2.2
+Stable tag: 1.1.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -22,6 +22,19 @@ Enables address autocomplete with the Google Places API for WooCommerce.
 * Optimized API calls to keep costs low.
 
 == Frequently Asked Questions ==
+
+= What countries are supported? =
+
+This extension should work for any country Google Places supports. It has been tested with:
+
+* Canada (CA)
+* Mexico (MX)
+* Portugal (PT)
+* Puerto Rico (PR)
+* United Kingdom (UK)
+* United States (US)
+
+If you find a bug or issue with address parsing for a specific country, please reach out to support!
 
 = How do I get a Google Places API Key? =
 
@@ -47,6 +60,10 @@ This plugin does one thing, and it does it well.
 2. Settings page.
 
 == Changelog ==
+
+= 1.1.1 =
+
+* Update: Support for Mexico.
 
 = 1.1.0 =
 
