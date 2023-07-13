@@ -138,9 +138,18 @@ class AddressAutocomplete {
 			"administrative_area_level_1"
 		);
 		if (stateField.tagName == "SELECT") {
-			stateField.value = stateComponent.short_name;
 			Array.prototype.forEach.call(stateField.options, function (option) {
-				if (stateComponent.short_name == option.value) {
+				// We can generally assume the shortname will be the value.
+				if (option.value == stateComponent.short_name) {
+					stateField.value = stateComponent.short_name;
+					option.selected = true;
+					return true;
+				}
+
+				// But if there isn't a match, we can try the long name.
+				// This was implemented for Mexico.
+				if (option.text == stateComponent.long_name) {
+					stateField.value = stateComponent.long_name;
 					option.selected = true;
 					return true;
 				}
