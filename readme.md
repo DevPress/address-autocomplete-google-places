@@ -1,5 +1,8 @@
 # Address Autocomplete with Google Places
 
+This plugin is also available on wordpress.org:
+[https://wordpress.org/plugins/address-autocomplete-google-places/](https://wordpress.org/plugins/address-autocomplete-google-places/)
+
 -   Requires PHP: 7.0
 -   WP requires at least: 6.0
 -   WP tested up to: 6.2.2
